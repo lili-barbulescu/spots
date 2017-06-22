@@ -2,6 +2,7 @@ package systems.ab4.workshop.spots;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by blili on 6/22/2017.
@@ -24,6 +25,13 @@ public class Location {
 
     @Enumerated(EnumType.STRING)
     private LocationType type;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    private List<Location> children;
+
+    @OneToMany(mappedBy = "location")
+    private List <Spot> spots;
+
 
     protected Location() {
     }
@@ -66,13 +74,28 @@ public class Location {
         this.type = type;
     }
 
+    public List<Location> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Location> children) {
+        this.children = children;
+    }
+
+    public List<Spot> getSpots() {
+        return spots;
+    }
+
+    public void setSpots(List<Spot> spots) {
+        this.spots = spots;
+    }
+
     @Override
     public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", parent=" + parent +
-                ", type=" + type +
-                '}';
-    }
+        return String.format(
+                "Location[id=%d, name='%s', parent='%s', type='%s', childrenSize='%s']",
+                id, name,parent,type,(children != null ? children.size() : 0 ));
+            }
+
+
 }
